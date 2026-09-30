@@ -37,6 +37,7 @@ from libretranslate.locales import (
 
 from .api_keys import Database, RemoteDatabase
 from .suggestions import Database as SuggestionsDatabase
+from .glossary import Database as GlossaryDatabase
 
 # Rough map of emoji characters
 emojis = {e: True for e in \
@@ -197,6 +198,7 @@ def create_app(args):
 
     storage.setup(args.shared_storage)
     trans_cache = cache.setup(args.translation_cache)
+    glossary_db = GlossaryDatabase(args.glossary_db_path, args.glossary_seed_path) if args.glossary else None
 
     if not args.disable_files_translation:
         remove_translated_files.setup(get_upload_dir())
@@ -572,6 +574,44 @@ def create_app(args):
         response.headers.add("Access-Control-Max-Age", 60 * 60 * 24 * 20)
         return response
 
+    @bp.route("/glossaries", methods=['GET'])
+    @limiter.exempt
+    def glossary_list():
+        if glossary_db is None:
+            return jsonify([])
+        source = request.values.get("source")
+        target = request.values.get("target")
+        return jsonify(glossary_db.list_terms(source, target))
+    
+    @bp.route("/glossaries", methods=['POST'])
+    @limiter.exempt
+    def glossary_add():
+        if glossary_db is None:
+            abort(400, description=_("Glossary is disabled"))
+        if request.is_json:
+            data = get_json_dict(request)
+        else:
+            data = request.values
+        source = data.get("source")
+        target = data.get("target")
+        src_term = data.get("src_term")
+        tgt_term = data.get("tgt_term")
+        if not (source and target and src_term and tgt_term):
+            abort(400, description=_("Invalid request: source, target, src_term, tgt_term are required"))
+        glossary_db.add_term(source, target, src_term, tgt_term)
+        return jsonify({"ok": True})
+    
+    @bp.route("/glossaries", methods=['DELETE'])
+    @limiter.exempt
+    def glossary_delete():
+        if glossary_db is None:
+            abort(400, description=_("Glossary is disabled"))
+        source = request.values.get("source")
+        target = request.values.get("target")
+        src_term = request.values.get("src_term")
+        glossary_db.remove_term(source, target, src_term)
+        return jsonify({"ok": True})
+    
     @bp.post("/translate")
     @access_check
     def translate():
@@ -833,6 +873,8 @@ def create_app(args):
                           hypotheses = translator.hypotheses(text, num_alternatives + 1)
                           translated_text = unescape(improve_translation_formatting(text, hypotheses[0].value))
                           alternatives = filter_unique([unescape(improve_translation_formatting(text, hypotheses[i].value)) for i in range(1, len(hypotheses))], translated_text)
+                          if glossary_db is not None:
+                              translated_text, alternatives = glossary_db.apply(translator, text, translated_text, alternatives, src_lang.code, tgt_lang.code)
                     else:
                       translated_text = text # Cannot translate, send the original text back
                       alternatives = []
@@ -859,6 +901,8 @@ def create_app(args):
                       hypotheses = translator.hypotheses(q, num_alternatives + 1)
                       translated_text = unescape(improve_translation_formatting(q, hypotheses[0].value))
                       alternatives = filter_unique([unescape(improve_translation_formatting(q, hypotheses[i].value)) for i in range(1, len(hypotheses))], translated_text)
+                      if glossary_db is not None:
+                          translated_text, alternatives = glossary_db.apply(translator, q, translated_text, alternatives, src_lang.code, tgt_lang.code)
                 else:
                   translated_text = q # Cannot translate, send the original text back
                   alternatives = []
