@@ -37,6 +37,7 @@ from libretranslate.locales import (
 
 from .api_keys import Database, RemoteDatabase
 from .suggestions import Database as SuggestionsDatabase
+from .scenarios import list_scenarios, render_scenario
 from .glossary import Database as GlossaryDatabase
 
 # Rough map of emoji characters
@@ -612,6 +613,23 @@ def create_app(args):
         glossary_db.remove_term(source, target, src_term)
         return jsonify({"ok": True})
     
+    @bp.route("/scenarios", methods=['GET'])
+    @limiter.exempt
+    def scenarios_list():
+        return jsonify(list_scenarios())
+
+    @bp.route("/scenarios/<sid>/render", methods=['POST'])
+    @limiter.exempt
+    def scenario_render(sid):
+        if request.is_json:
+            data = get_json_dict(request)
+        else:
+            data = dict(request.values)
+        result = render_scenario(sid, data)
+        if result is None:
+            abort(404, description=_("Scenario not found or invalid variables"))
+        return jsonify(result)
+
     @bp.post("/translate")
     @access_check
     def translate():

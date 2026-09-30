@@ -1,0 +1,9 @@
+{
+  "id": "courseware_title",
+  "name_zh": "课件标题",
+  "name_ru": "Заголовок учебных материалов",
+  "category": "courseware",
+  "variables": ["course", "chapter", "lecturer"],
+  "template_zh": "${course} · 第 ${chapter} 讲  主讲：${lecturer}",
+  "template_ru": "${course} · Лекция ${chapter}  Лектор: ${lecturer}"
+}
