@@ -1,0 +1,9 @@
+{
+  "id": "course_cancel_notice",
+  "name_zh": "课程停课通知",
+  "name_ru": "Уведомление об отмене занятия",
+  "category": "notice",
+  "variables": ["reason", "course_name", "date", "instructor"],
+  "template_zh": "各位同学：因${reason}，${course_name}（原定 ${date}，授课教师 ${instructor}）停课一次，后续安排另行通知。教务处",
+  "template_ru": "Уважаемые студенты: в связи с ${reason} занятие по курсу «${course_name}» (запланированное на ${date}, преподаватель ${instructor}) отменяется. Дополнительная информация будет сообщена позже. Учебная часть"
+}
