@@ -246,6 +246,21 @@ _default_options_objects = [
         'default_value': '',
         'value_type': 'str'
     },
+    {
+        'name': 'GLOSSARY',
+        'default_value': False,
+        'value_type': 'bool'
+    },
+    {
+        'name': 'GLOSSARY_DB_PATH',
+        'default_value': 'db/glossary.db',
+        'value_type': 'str'
+    },
+    {
+        'name': 'GLOSSARY_SEED_PATH',
+        'default_value': 'data/glossary_zh_ru.json',
+        'value_type': 'str'
+    },
 ]
 
 
