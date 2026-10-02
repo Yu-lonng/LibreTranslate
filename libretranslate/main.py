@@ -273,6 +273,12 @@ def get_parser():
         type=str,
         help="JSON seed file path for the glossary",
     )
+    parser.add_argument(
+        "--campus-noise",
+        default=DEFARGS['CAMPUS_NOISE'],
+        action="store_true",
+        help="Enable campus noise handling (course codes, abbreviations, name transliteration)",
+    )
     return parser
 
 def get_args():
