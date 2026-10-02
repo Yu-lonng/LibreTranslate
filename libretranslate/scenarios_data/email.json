@@ -1,0 +1,9 @@
+{
+  "id": "email_to_instructor",
+  "name_zh": "致外方教师邮件",
+  "name_ru": "Письмо преподавателю",
+  "category": "email",
+  "variables": ["instructor_name", "student_name", "course_name", "topic", "date"],
+  "template_zh": "尊敬的 ${instructor_name} 老师：\n您好！我是 ${course_name} 课程的学生 ${student_name}。关于 ${topic}，我希望在 ${date} 与您当面请教，不知是否方便？\n感谢！\n${student_name}",
+  "template_ru": "Уважаемый(ая) ${instructor_name}!\nЗдравствуйте! Я ${student_name}, студент(ка) курса «${course_name}». По теме ${topic} я хотел(а) бы встретиться с Вами ${date} для обсуждения. Будет ли это удобно?\nЗаранее благодарю!\n${student_name}"
+}
