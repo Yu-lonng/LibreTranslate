@@ -255,6 +255,24 @@ def get_parser():
         type=str,
         help="Add a prefix like /url-prefix to URL: example.com:5000/url-prefix/",
     )
+    parser.add_argument(
+        "--glossary",
+        default=DEFARGS['GLOSSARY'],
+        action="store_true",
+        help="Enable the campus bilingual terminology glossary (zh<->ru)",
+    )
+    parser.add_argument(
+        "--glossary-db-path",
+        default=DEFARGS['GLOSSARY_DB_PATH'],
+        type=str,
+        help="SQLite database path for the glossary",
+    )
+    parser.add_argument(
+        "--glossary-seed-path",
+        default=DEFARGS['GLOSSARY_SEED_PATH'],
+        type=str,
+        help="JSON seed file path for the glossary",
+    )
     return parser
 
 def get_args():
