@@ -261,6 +261,11 @@ _default_options_objects = [
         'default_value': 'data/glossary_zh_ru.json',
         'value_type': 'str'
     },
+    {
+        'name': 'CAMPUS_NOISE',
+        'default_value': False,
+        'value_type': 'bool'
+    },
 ]
 
 

@@ -39,6 +39,7 @@ from .api_keys import Database, RemoteDatabase
 from .suggestions import Database as SuggestionsDatabase
 from .glossary import Database as GlossaryDatabase
 from .scenarios import list_scenarios, render_scenario
+from .campus_preprocess import detect as campus_detect, postcorrect as campus_postcorrect
 
 # Rough map of emoji characters
 emojis = {e: True for e in \
@@ -897,6 +898,9 @@ def create_app(args):
                       translated_text = text # Cannot translate, send the original text back
                       alternatives = []
 
+                    if args.campus_noise:
+                        campus_tokens = campus_detect(text, src_lang.code, tgt_lang.code)
+                        translated_text = campus_postcorrect(translator, translated_text, text, campus_tokens, src_lang.code, tgt_lang.code)
                     batch_results.append(translated_text)
                     batch_alternatives.append(alternatives)
 
@@ -925,6 +929,9 @@ def create_app(args):
                   translated_text = q # Cannot translate, send the original text back
                   alternatives = []
 
+                if args.campus_noise:
+                    campus_tokens = campus_detect(q, src_lang.code, tgt_lang.code)
+                    translated_text = campus_postcorrect(translator, translated_text, q, campus_tokens, src_lang.code, tgt_lang.code)
                 result = {"translatedText": translated_text}
 
                 if source_lang == "auto":

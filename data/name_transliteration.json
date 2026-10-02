@@ -1,0 +1,34 @@
+{
+  "_comment": "Canonical transliteration pairs for campus person names. zh->ru uses the Palladius (Палладий) system; ru->zh uses common accepted transcriptions.",
+  "pairs": [
+    {
+      "source": "zh",
+      "target": "ru",
+      "names": {
+        "张伟": "Чжан Вэй",
+        "李娜": "Ли На",
+        "王强": "Ван Цян",
+        "刘洋": "Лю Ян",
+        "陈明": "Чэнь Мин",
+        "赵雷": "Чжао Лэй",
+        "孙丽": "Сунь Ли",
+        "周杰": "Чжоу Цзе",
+        "吴敏": "У Минь",
+        "郑华": "Чжэн Хуа"
+      }
+    },
+    {
+      "source": "ru",
+      "target": "zh",
+      "names": {
+        "Иванов": "伊万诺夫",
+        "Петров": "彼得罗夫",
+        "Смирнова": "斯米尔诺娃",
+        "Соколов": "索科洛夫",
+        "Попов": "波波夫",
+        "Кузнецов": "库兹涅佐夫",
+        "Васильев": "瓦西里耶夫"
+      }
+    }
+  ]
+}
